@@ -1,0 +1,129 @@
+import random
+import time
+
+#Items:
+
+mining_gloves = False
+
+
+iron_ore = 0
+iron_ore_xp = 15
+iron_chance = range(0, 50)
+
+iron_bar = 0
+iron_bar_xp = 20
+
+coal_ore = 0
+coal_xp = 20
+coal_chance = range(50, 81)
+
+gold_ore = 0
+gold_xp = 50
+gold_chance = range(80, 95)
+
+mithril_ore = 0
+mithril_xp = 100
+mithril_chance = range(96, 100)
+
+xptotal = 0
+xpto99 = 1000000
+picks = 0
+mine = "mine"
+smith = "smith"
+inv = "inv"
+
+running = True
+mining = False
+smithing = False
+
+def update_inventory():
+    global inventory
+    inventory = {"Iron bar": iron_bar, "Iron ore": iron_ore, "Mithril ore ": mithril_ore, "Gold Ore ": gold_ore,
+                 "Coal ": coal_ore}
+while running:
+    update_inventory()
+
+
+    #MAIN MENU
+    userinput = input("What would you like to do?")
+    if userinput == mine:
+        mining = True
+        smith = False
+    if userinput == smith:
+        smithing = True
+        mining = False
+    if userinput == inv:
+        print(inventory)
+
+    #Mining
+    while mining:
+        glanceroll = random.choice(range(0, 100))
+        mineroll = random.choice(range(0, 100))
+        chance_for_ore = random.choice(range(0, 100))
+        picks += 1
+        time.sleep(2)
+        print(" ")
+        print("You swing your pick at the rocks")
+        print(" ")
+        if glanceroll > 3:
+            if chance_for_ore > 49:
+                print("You got some ore!")
+                time.sleep(1)
+                if mineroll < 50:
+                    print("you got some iron!")
+                    iron_ore += 1
+                    xptotal += iron_ore_xp
+                if mineroll > 49:
+                    if mineroll < 81:
+                        print("You got some Coal!")
+                        coal_ore += 1
+                        xptotal += coal_xp
+                        time.sleep(.1)
+                if mineroll > 80:
+                    if mineroll < 95:
+                        print("You got some GOLD! PAY DAY!")
+                        gold_ore += 1
+                        xptotal += gold_xp
+                if mineroll > 95:
+                    if mineroll < 100:
+                        print("MITHRIL!")
+                        mithril_ore += 1
+                        xptotal += mithril_ore
+                        print("TOTAL XP SO FAR: " + str(xptotal))
+        else:
+            if mining_gloves == False:
+                print(" ")
+                time.sleep(1)
+                print("Your pick glances off the ore into the ground. OUCH! ")
+                print(" ")
+                mining = False
+            else:
+                print(" ")
+                time.sleep(1)
+                print("Your pick glances off the ore into the ground.")
+                print("Your mining gloves absorb the shock.")
+                print(" ")
+    while smithing:
+        smithroll = random.choice(range(1, 100))
+
+        if iron_ore >= 1:
+            iron_ore -= 1
+            print(" ")
+            print("You put the ore in the furnace...")
+            if smithroll < 75:
+                iron_bar += 1
+                xptotal += iron_bar_xp
+                time.sleep(1)
+                print(" ")
+                print("You create and Iron bar!")
+            else:
+                time.sleep(1)
+                print(" ")
+                print("You accidentally ruin ore.")
+        else:
+            print(" ")
+            print("You have run out of iron")
+            time.sleep(1)
+            print(" ")
+            smithing = False
+            break
